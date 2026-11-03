@@ -5,6 +5,17 @@ import main.kotlin.cl.duoc.pizzeria.model.Pedido
 import main.kotlin.cl.duoc.pizzeria.model.Pizza
 import main.kotlin.cl.duoc.pizzeria.model.Repartidor
 
+// Ingredientes para 20 Pizzas Pepperoni y 10 Cuatro Quesos.
+val inventarioIngredientes = mutableMapOf(
+    "Masa" to 30,
+    "Queso Mozzarella" to 30,
+    "Queso Azul" to 10,
+    "Queso Parmesano" to 10,
+    "Queso Emmental" to 10,
+    "Salsa Tomates" to 30,
+    "Pepperoni" to 20,
+)
+
 fun main() {
 
     println("=== KOTLIN PIZZA ===")
@@ -69,6 +80,8 @@ fun main() {
     } while (cantidadPizzas <= 0)
 
     println("Has seleccionado: ${cantidadPizzas} pizzas de ${tipoPizza.nombrePizza} con un valor de $${tipoPizza.precioUnitario} cada una.")
+
+
 
     // 3. Calculo del precio total
     val subTotalPedido = cantidadPizzas * tipoPizza.precioUnitario
