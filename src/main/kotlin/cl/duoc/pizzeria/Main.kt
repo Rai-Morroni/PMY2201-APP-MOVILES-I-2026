@@ -122,14 +122,11 @@ fun main() {
     println("El Total a Pagar es $${totalAPagar}")
 
     // 4. Manejo stock ingredientes
-//  if (cantidadPizzas > 0 && cantidadPizzas <= tipoPizza.ingredientesDisponibles) {
+
     val stockSuficiente = prepararPizza(tipoPizza.recetaPizza, cantidadPizzas, inventarioIngredientes)
 
     if (cantidadPizzas > 0 && stockSuficiente) {
-        //tipoPizza.ingredientesDisponibles -= cantidadPizzas
         println("Pedido confirmado")
-        //println("Stock restante : ${tipoPizza.ingredientesDisponibles}")
-
 
         val clienteActual = Cliente(nombre = nombre, telefono = telefono, email = email, rut = rut, direccion = direccion)
 
@@ -144,7 +141,7 @@ fun main() {
         val repartidorAsignado = listaRepartidores.find { it.disponibilidad == "Disponible" }
             ?: Repartidor("Sin Asignar", "N/A", "N/A", "N/A", "No disponible")
 
-        val pedidoActual = Pedido(idPedido.toString(), cantidadPizzas, subTotalPedido, totalAPagar, "En Preparación")
+        val pedidoActual = Pedido(idPedido.toString(), clienteActual, tipoPizza, cantidadPizzas)
 
         // 5. Resumen del Pedido
         println("\n==================================")
@@ -162,8 +159,9 @@ fun main() {
         println("Cantidad: ${cantidadPizzas}")
         println("SubTotal: $${subTotalPedido}")
         if (cantidadPizzas > 3) println("Descuento: 10% Aplicado")
-        println("Total a Pagar: $${totalAPagar}")
-        println("Estado Pedido: En Preparación")
+        //println("Total a Pagar: $${totalAPagar}")
+        println("Total a Pagar: $${pedidoActual.calcularTotal()}")
+        println("Estado Pedido: ${pedidoActual.estado}")
         println("Repartidor: ${repartidorAsignado.nombre} está ${repartidorAsignado.disponibilidad}")
         println("==================================")
     } else {

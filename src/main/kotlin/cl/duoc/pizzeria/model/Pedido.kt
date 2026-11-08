@@ -1,13 +1,42 @@
 package main.kotlin.cl.duoc.pizzeria.model
+import kotlin.math.ceil
 
+// 1. Declaración Enum
+enum class EstadoPedido {
+    EN_PREPARACION,
+    LISTO,
+    EN_CAMINO
+}
+
+// 2. Refactorizacion de clase Pedido
 class Pedido(
     val idPedido: String,       // Identificador único del pedido
-    val cantidadPizzas: Int,    // Cantidad de pizzas en el pedido
-    val totalNeto: Int,         // Precio total ante de aplicar descuentos
-    val totalPedido: Double,    // Total calculado del pedido después de aplicar descuentos
-    val estadoPedido: String    // “Preparación”, “En Camino”, “Entregado”
-)
+    val cliente: Cliente,       // Integra el objeto Cliente completo, no solo datos sueltos
+    val tipoPizza: Pizza,       // Integra el objeto Pizza para luego entregarlo a Lista de Productos
+    val cantidadPizzas: Int
 
+) {
+    // El estado ya no entra por el constructor, se crea por defecto  "EN_PREPARACION". Se asigna como 'var' para poder mutar
+    var estado: EstadoPedido = EstadoPedido.EN_PREPARACION
 
+    // 3. Metodo para modificar el comportamiento
+    fun cambiarEstado(nuevoEstado: EstadoPedido) {
+        estado = nuevoEstado
+        println("El pedido $idPedido ahora está: $estado")
+    }
 
+    // 4. Metodo para los calculos matematicos
+    fun calcularTotal(): Double {
+        val subtotal = cantidadPizzas * tipoPizza.precioUnitario
 
+        // Regla negocio: 10% de descuento si son más de 3 pizzas
+        val descuento = if (cantidadPizzas > 3) 0.90 else 1.0
+        val totalConDescuento = subtotal * descuento
+
+        // Regla negocio: Agregar impuesto IVA (19%)
+        val totalConIva = totalConDescuento * 1.19
+
+        // Regla negocio: Redondear cifra hacia arriba (CLP)
+        return ceil(totalConIva)
+    }
+}
