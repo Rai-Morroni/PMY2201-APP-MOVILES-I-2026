@@ -85,6 +85,10 @@ fun main() {
     print("Ingrese Dirección de Entrega: ")
     val direccion = readln()?.ifBlank { "Sin Dirección" } ?: "Sin Dirección"
 
+    //f. Notas adicionales (Opcionales)
+    print("Ingrese notas adicionales del pedido (presione Enter para omitir): ")
+    val notas: String? = readlnOrNull()?.takeIf { it.isNotBlank() }
+
 
     println("Cliente Registrado: $idPedido, $nombre, $telefono, $email, $rut y $direccion")
 
@@ -178,6 +182,7 @@ fun main() {
         println("Email: ${clienteActual.email}")
         println("Dirección: ${clienteActual.direccion}")
         println("Teléfono: ${clienteActual.telefono}")
+        println( notas?.let { "Notas: $it" } ?: "Sin notas" )
         println("----------------------------------")
         println("Tipo Pizza: ${tipoPizza.nombrePizza}")
         println("Precio Unitario: $${tipoPizza.precioUnitario}")
