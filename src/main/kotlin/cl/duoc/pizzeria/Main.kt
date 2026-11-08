@@ -161,14 +161,14 @@ fun main() {
 
         // Declaramos la lista de empleados disponibles
         val listaRepartidores = listOf(
-            Repartidor("Juan", "987654321", "juan@mail.com", "11.111.111-1", "No disponible"),
-            Repartidor("Carlos", "123456789", "carlos@mail.com", "22.222.222-2", "Disponible"),
-            Repartidor("Ana", "555555555", "ana@mail.com", "33.333.333-3", "Disponible")
+            Repartidor("Juan", "987654321", "juan@mail.com", "11.111.111-1", "No disponible", 10.5),
+            Repartidor("Carlos", "123456789", "carlos@mail.com", "22.222.222-2", "Disponible", 8.3),
+            Repartidor("Ana", "555555555", "ana@mail.com", "33.333.333-3", "Disponible", 1.5)
         )
 
-        // Busca el primer repartidor disponible. Si find retorna null, el operador ?: crea un repartidor temporal por defecto.
-        val repartidorAsignado = listaRepartidores.find { it.disponibilidad == "Disponible" }
-            ?: Repartidor("Sin Asignar", "N/A", "N/A", "N/A", "No disponible")
+        // Filtra a los repartidores disponibles y selecciona el que se encuentre mas cercano. Si retorna null, el operador ?: crea un repartidor temporal por defecto.
+        val repartidorAsignado = listaRepartidores.filter { it.disponibilidad == "Disponible" }.minByOrNull { it.distanciaKm }
+            ?: Repartidor("Sin Asignar", "N/A", "N/A", "N/A", "No disponible", 0.0)
 
         val pedidoActual = Pedido(idPedido.toString(), clienteActual, tipoPizza, cantidadPizzas)
 
@@ -190,7 +190,7 @@ fun main() {
         println("SubTotal: $${subTotalPedido}")
         if (cantidadPizzas > 3) println("Descuento: 10% Aplicado")
         //println("Total a Pagar: $${totalAPagar}")
-        println("Total a Pagar: $${pedidoActual.calcularTotal()}")
+        println("Total a Pagar + IVA: $${pedidoActual.calcularTotal()}")
         println("Estado Pedido: ${pedidoActual.estado}")
         println("Repartidor: ${repartidorAsignado.nombre} está ${repartidorAsignado.disponibilidad}")
         println("==================================")

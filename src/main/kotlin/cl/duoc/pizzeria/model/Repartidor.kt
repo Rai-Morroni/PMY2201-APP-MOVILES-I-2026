@@ -5,7 +5,8 @@ class Repartidor(
     telefono: String,
     email: String,
     rut: String,
-    val disponibilidad: String      // "Disponible" o "No disponible"
+    val disponibilidad: String,      // "Disponible" o "No disponible"
+    val distanciaKm: Double
 ) : Usuario(nombre, telefono, email, rut) {
 
     fun entregarPedido(pedido: Pedido) {
