@@ -49,8 +49,33 @@ fun main() {
     } while (!telefonoValido)
 
     //c. Email
-    print("Ingrese Email del Cliente: ")
-    val email = readln()?.ifBlank { "Email Vacio" } ?: "Email Vacio"
+    var email = ""
+    var emailValido = false
+    var intentosEmail = 0
+    val patronEmail = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
+
+    do {
+        print("Ingrese Email del Cliente: ")
+        // 1. Captura la entrada evitando nulos
+        val emailIngresado = readln().ifBlank { "" }
+
+        // 2. Revisión: si hace match, conserva la entrada; si no, asigna el valor por defecto
+        // matches valida que la entrada coincida con el patron Regex.
+        if (emailIngresado.matches(patronEmail)) {
+            email = emailIngresado
+            emailValido = true // Salida exitosa del bucle
+        } else {
+            //Contador para sumar intentos
+            intentosEmail++
+            if (intentosEmail < 3) {
+                println("El formato del email ingresado es incorrecto. Intentos restantes: ${3 - intentosEmail}")
+            } else {
+                println("Máximo de intentos alcanzado. Se asignará correo por defecto: correo@invalido.com.")
+                email = "correo@invalido.com"
+                emailValido = true // Salida del bucle tras 3 intentos
+            }
+        }
+    } while (!emailValido)
 
     //d. RUT
     print("Ingrese RUT del Cliente: ")
