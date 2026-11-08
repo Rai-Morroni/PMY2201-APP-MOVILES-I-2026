@@ -124,21 +124,32 @@ fun main() {
     }
 
     // b. Cantidad de Pizzas
-    var cantidadPizzas: Int
+    var cantidadPizzasValida = false
+    var cantidadPizzasIngresada = 0
+
     do {
         print("Ingresa la cantidad de Pizzas deseadas: ")
-        cantidadPizzas = readln().toIntOrNull() ?: 0
+        val entradaUsuario = readln()
 
-        if (cantidadPizzas <= 0) {
-            println("Debes ingresar una cantidad mayor a cero.")
+        try {
+            cantidadPizzasIngresada = entradaUsuario.toInt()
+
+            if (cantidadPizzasIngresada >= 0) {
+                cantidadPizzasValida = true
+            } else {
+                println("Debes ingresar una cantidad mayor a cero.")
+            }
+        } catch (e: NumberFormatException) {
+            println("Error de formato: Ingresa únicamente numeros.")
         }
-    } while (cantidadPizzas <= 0)
+    } while (!cantidadPizzasValida)
 
-    println("Has seleccionado: ${cantidadPizzas} pizzas de ${tipoPizza.nombrePizza} con un valor de $${tipoPizza.precioUnitario} cada una.")
-
+    println("\n==================================")
+    println("Has seleccionado: ${cantidadPizzasIngresada} pizzas de ${tipoPizza.nombrePizza} con un valor de $${tipoPizza.precioUnitario} cada una.")
+    println("==================================")
 
     // 3. Calculo del precio total
-    val subTotalPedido = cantidadPizzas * tipoPizza.precioUnitario
+    val subTotalPedido = cantidadPizzasIngresada * tipoPizza.precioUnitario
 
     // Calculo de descuento para pedidos mayores a 3 pizzas.
     fun calcularDescuento(cantidadPizzas: Int, subTotalPedido: Double): Double {
@@ -146,15 +157,15 @@ fun main() {
         return subTotalPedido * descuentoCantidad
     }
 
-    val totalAPagar = calcularDescuento(cantidadPizzas, subTotalPedido.toDouble())
+    val totalAPagar = calcularDescuento(cantidadPizzasIngresada, subTotalPedido.toDouble())
     println("El Subtotal del pedido es $${subTotalPedido}")
     println("El Total a Pagar es $${totalAPagar}")
 
     // 4. Manejo stock ingredientes
 
-    val stockSuficiente = prepararPizza(tipoPizza.recetaPizza, cantidadPizzas, inventarioIngredientes)
+    val stockSuficiente = prepararPizza(tipoPizza.recetaPizza, cantidadPizzasIngresada, inventarioIngredientes)
 
-    if (cantidadPizzas > 0 && stockSuficiente) {
+    if (cantidadPizzasIngresada > 0 && stockSuficiente) {
         println("Pedido confirmado")
 
         val clienteActual = Cliente(nombre = nombre, telefono = telefono, email = email, rut = rut, direccion = direccion)
@@ -170,7 +181,7 @@ fun main() {
         val repartidorAsignado = listaRepartidores.filter { it.disponibilidad == "Disponible" }.minByOrNull { it.distanciaKm }
             ?: Repartidor("Sin Asignar", "N/A", "N/A", "N/A", "No disponible", 0.0)
 
-        val pedidoActual = Pedido(idPedido.toString(), clienteActual, tipoPizza, cantidadPizzas)
+        val pedidoActual = Pedido(idPedido.toString(), clienteActual, tipoPizza, cantidadPizzasIngresada)
 
         // 5. Resumen del Pedido
         println("\n==================================")
@@ -186,9 +197,9 @@ fun main() {
         println("----------------------------------")
         println("Tipo Pizza: ${tipoPizza.nombrePizza}")
         println("Precio Unitario: $${tipoPizza.precioUnitario}")
-        println("Cantidad: ${cantidadPizzas}")
+        println("Cantidad: ${cantidadPizzasIngresada}")
         println("SubTotal: $${subTotalPedido}")
-        if (cantidadPizzas > 3) println("Descuento: 10% Aplicado")
+        if (cantidadPizzasIngresada > 3) println("Descuento: 10% Aplicado")
         //println("Total a Pagar: $${totalAPagar}")
         println("Total a Pagar + IVA: $${pedidoActual.calcularTotal()}")
         println("Estado Pedido: ${pedidoActual.estado}")
