@@ -1,6 +1,7 @@
 package main.kotlin.cl.duoc.pizzeria
 
 import main.kotlin.cl.duoc.pizzeria.model.Cliente
+import main.kotlin.cl.duoc.pizzeria.model.EstadoPedido
 import main.kotlin.cl.duoc.pizzeria.model.Pedido
 import main.kotlin.cl.duoc.pizzeria.model.Pizza
 import main.kotlin.cl.duoc.pizzeria.model.Repartidor
@@ -23,6 +24,8 @@ fun main() {
 
     // ===== Tipos de Datos =====
     val idPedido: Int = 1001
+    // Lista para guardar los pedidos:
+    val historialPedidos = mutableListOf<Pedido>()
 
     // 1. Registro de datos del cliente
 
@@ -80,6 +83,9 @@ fun main() {
     //d. RUT
     print("Ingrese RUT del Cliente: ")
     val rut = readln()?.ifBlank { "Rut Vacio" } ?: "Rut Vacio"
+// NO OLVIDAR !!!!!!!!!
+// Investigar formas de control para RUT. Se me ocurre manejar entrada de RUT+DV por separado para controlarlo como INT.
+
 
     //e. Dirección
     print("Ingrese Dirección de Entrega: ")
@@ -148,21 +154,7 @@ fun main() {
     println("Has seleccionado: ${cantidadPizzasIngresada} pizzas de ${tipoPizza.nombrePizza} con un valor de $${tipoPizza.precioUnitario} cada una.")
     println("==================================")
 
-    // 3. Calculo del precio total
-    val subTotalPedido = cantidadPizzasIngresada * tipoPizza.precioUnitario
-
-    // Calculo de descuento para pedidos mayores a 3 pizzas.
-    fun calcularDescuento(cantidadPizzas: Int, subTotalPedido: Double): Double {
-        val descuentoCantidad: Double = if (cantidadPizzas > 3) 0.90 else 1.0
-        return subTotalPedido * descuentoCantidad
-    }
-
-    val totalAPagar = calcularDescuento(cantidadPizzasIngresada, subTotalPedido.toDouble())
-    println("El Subtotal del pedido es $${subTotalPedido}")
-    println("El Total a Pagar es $${totalAPagar}")
-
-    // 4. Manejo stock ingredientes
-
+    // 3. Manejo stock ingredientes
     val stockSuficiente = prepararPizza(tipoPizza.recetaPizza, cantidadPizzasIngresada, inventarioIngredientes)
 
     if (cantidadPizzasIngresada > 0 && stockSuficiente) {
@@ -181,9 +173,12 @@ fun main() {
         val repartidorAsignado = listaRepartidores.filter { it.disponibilidad == "Disponible" }.minByOrNull { it.distanciaKm }
             ?: Repartidor("Sin Asignar", "N/A", "N/A", "N/A", "No disponible", 0.0)
 
-        val pedidoActual = Pedido(idPedido.toString(), clienteActual, tipoPizza, cantidadPizzasIngresada)
 
-        // 5. Resumen del Pedido
+        val pedidoActual = Pedido(idPedido.toString(), clienteActual, tipoPizza, cantidadPizzasIngresada)
+        // Agrega el pedidoActual a la Lista de historial de pedidos.
+        historialPedidos.add(pedidoActual)
+
+        // 4. Resumen del Pedido
         println("\n==================================")
         println("      RESUMEN DEL PEDIDO          ")
         println("==================================")
@@ -198,9 +193,8 @@ fun main() {
         println("Tipo Pizza: ${tipoPizza.nombrePizza}")
         println("Precio Unitario: $${tipoPizza.precioUnitario}")
         println("Cantidad: ${cantidadPizzasIngresada}")
-        println("SubTotal: $${subTotalPedido}")
+        println("SubTotal: $${(cantidadPizzasIngresada * tipoPizza.precioUnitario)}")
         if (cantidadPizzasIngresada > 3) println("Descuento: 10% Aplicado")
-        //println("Total a Pagar: $${totalAPagar}")
         println("Total a Pagar + IVA: $${pedidoActual.calcularTotal()}")
         println("Estado Pedido: ${pedidoActual.estado}")
         println("Repartidor: ${repartidorAsignado.nombre} está ${repartidorAsignado.disponibilidad}")
@@ -210,5 +204,11 @@ fun main() {
         println("Stock insuficiente de ingredientes para la Pizza de ${tipoPizza.nombrePizza}")
         println("Inténtalo nuevamente")
         println("===================================")
+    }
+
+    // ===== CIERRE DE CAJA =====
+    println("\n=== REPORTE DIARIO DE VENTAS ===")
+    for (pedido in historialPedidos) {
+        println("ID: ${pedido.idPedido} | Cliente: ${pedido.cliente.nombre} | Total: $${pedido.calcularTotal()} | Estado: ${pedido.estado}")
     }
 }
