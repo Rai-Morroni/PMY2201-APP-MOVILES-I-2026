@@ -81,11 +81,25 @@ fun main() {
     } while (!emailValido)
 
     //d. RUT
-    print("Ingrese RUT del Cliente: ")
-    val rut = readln()?.ifBlank { "Rut Vacio" } ?: "Rut Vacio"
-// NO OLVIDAR !!!!!!!!!
-// Investigar formas de control para RUT. Se me ocurre manejar entrada de RUT+DV por separado para controlarlo como INT.
+    var rutCompleto = ""
+    var rutValido = false
 
+    // Regex: Entre 7 y 8 números de largo + guion + terminacion en número o letra K/k
+    val patronRut = Regex("^[0-9]{7,8}-[0-9Kk]$")
+
+    do {
+        print("Ingrese RUT del Cliente (sin puntos ni guión y CON dígito verificador): ")
+        // Trim elimina espacios en blanco al inicio o final de la entrada
+        val entradaRut = readln().trim()
+
+        if (entradaRut.matches(patronRut)) {
+            // Se normaliza la entrada de letra K a mayúsculas
+            rutCompleto = entradaRut.uppercase()
+            rutValido = true
+        } else {
+            println("Formato inválido. Ingrésalo sin puntos y con guion.")
+        }
+    } while (!rutValido)
 
     //e. Dirección
     print("Ingrese Dirección de Entrega: ")
@@ -95,8 +109,9 @@ fun main() {
     print("Ingrese notas adicionales del pedido (presione Enter para omitir): ")
     val notas: String? = readlnOrNull()?.takeIf { it.isNotBlank() }
 
-
-    println("Cliente Registrado: $idPedido, $nombre, $telefono, $email, $rut y $direccion")
+    println("\n==================================")
+    println("Cliente Registrado: $idPedido, $nombre, $telefono, $email, $rutCompleto y $direccion")
+    println("==================================")
 
     // 2. Selección del pedido
 
@@ -160,7 +175,7 @@ fun main() {
     if (cantidadPizzasIngresada > 0 && stockSuficiente) {
         println("Pedido confirmado")
 
-        val clienteActual = Cliente(nombre = nombre, telefono = telefono, email = email, rut = rut, direccion = direccion)
+        val clienteActual = Cliente(nombre = nombre, telefono = telefono, email = email, rut = rutCompleto, direccion = direccion)
 
         // Declaramos la lista de empleados disponibles
         val listaRepartidores = listOf(
