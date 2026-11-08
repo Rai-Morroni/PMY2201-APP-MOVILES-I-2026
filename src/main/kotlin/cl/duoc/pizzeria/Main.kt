@@ -195,7 +195,7 @@ fun main() {
         println("Repartidor: ${repartidorAsignado.nombre} está ${repartidorAsignado.disponibilidad}")
         println("==================================")
     } else {
-        println("===================================")
+        println("\n==================================")
         println("Stock insuficiente de ingredientes para la Pizza de ${tipoPizza.nombrePizza}")
         println("Inténtalo nuevamente")
         println("===================================")

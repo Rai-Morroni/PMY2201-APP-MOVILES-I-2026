@@ -24,6 +24,7 @@ val pizzaCuatroQuesos = Pizza("Pepperoni", 10990, mapOf(
     "Salsa Tomates" to 1,
 ))
 
+// Control de Inventario
 // Función para verificar ingredientes disponibles
 fun prepararPizza(recetaPizza: Map<String, Int>, cantidadPizzas: Int, inventario: MutableMap<String, Int>): Boolean {
 
@@ -33,12 +34,21 @@ fun prepararPizza(recetaPizza: Map<String, Int>, cantidadPizzas: Int, inventario
         val stockActual = inventario[ingrediente] ?: 0
 
         if (stockActual < totalNecesario) {
+            println("\n==================================")
             println("Error: Stock insuficiente de $ingrediente. Necesario: $totalNecesario, Disponible: $stockActual")
-            return false // Interrumpimos la función retornando falso
+
+            // Pasos de reposicion de ingredientes
+            when (ingrediente) {
+                "Masa" -> println("Acción: Descongelar masas de reserva.")
+                "Queso Mozzarella" -> println("Acción: Preparar nuevo lote de Mozzarella inmediatamente.")
+                "Salsa Tomates" -> println("Acción: Reponer contenedores de Salsa Tomates inmediatamente.")
+                else -> println("Acción: Comunicar quiebre de stock de $ingrediente a Encargado de Bodega inmediatamente.")
+            }
+            return false // Interrumpe la función retornando falso
         }
     }
 
-    // Si el bucle anterior no retornó false, significa que hay de todo. Procedemos a descontar.
+    // Si el bucle anterior no retornó false, significa que hay stock suficiente. Procede a descontar.
     for ((ingrediente, cantidadUnitaria) in recetaPizza) {
         val totalNecesario = cantidadUnitaria * cantidadPizzas
         inventario[ingrediente] = inventario[ingrediente]!! - totalNecesario
