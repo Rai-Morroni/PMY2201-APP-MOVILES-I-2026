@@ -1,9 +1,9 @@
 package main.kotlin.cl.duoc.pizzeria.model
 
-class Cliente(
-    nombre: String,
-    telefono: String,
-    email: String,
-    rut: String,
+data class Cliente(
+    override val nombre: String,
+    override var telefono: String,
+    override val email: String,
+    override val rut: String,
     val direccion: String
-) : Usuario(nombre, telefono, email, rut) {}
+) : Usuario(nombre, telefono, email, rut)
