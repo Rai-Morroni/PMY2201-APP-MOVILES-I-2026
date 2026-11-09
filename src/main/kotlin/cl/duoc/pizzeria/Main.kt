@@ -5,6 +5,8 @@ import main.kotlin.cl.duoc.pizzeria.model.Pedido
 import main.kotlin.cl.duoc.pizzeria.model.Pizza
 import main.kotlin.cl.duoc.pizzeria.model.Repartidor
 import main.kotlin.cl.duoc.pizzeria.model.prepararPizza
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.hasAnnotation
 
 // Ingredientes para 20 Pizzas Pepperoni y 10 Cuatro Quesos.
 val inventarioIngredientes = mutableMapOf(
@@ -154,10 +156,10 @@ fun main() {
         try {
             cantidadPizzasIngresada = entradaUsuario.toInt()
 
-            if (cantidadPizzasIngresada >= 0) {
+            if (cantidadPizzasIngresada in 1..100) { // Uso de Ranges para validar la entrada.
                 cantidadPizzasValida = true
             } else {
-                println("Debes ingresar una cantidad mayor a cero.")
+                println("Debes ingresar una cantidad mayor a cero y menor a 100.")
             }
         } catch (e: NumberFormatException) {
             println("Error de formato: Ingresa únicamente numeros.")
@@ -171,7 +173,7 @@ fun main() {
     // 3. Manejo stock ingredientes
     val stockSuficiente = prepararPizza(tipoPizza.recetaPizza, cantidadPizzasIngresada, inventarioIngredientes)
 
-    if (cantidadPizzasIngresada > 0 && stockSuficiente) {
+    if (stockSuficiente) {
         println("Pedido confirmado")
 
         val clienteActual = Cliente(nombre = nombre, telefono = telefono, email = email, rut = rutCompleto, direccion = direccion)
@@ -241,6 +243,18 @@ fun main() {
         // 2. Sobrecarga del operador '==': Igualdad de objetos
         val pizzaComparacion = Pizza(tipoPizza.nombrePizza, tipoPizza.precioUnitario, tipoPizza.recetaPizza)
         println("¿El producto original y el de comparación son lógicamente iguales?: ${tipoPizza == pizzaComparacion}")
+
+        // 3. Uso de Reflection y Anotaciones
+        println("\n=== ANÁLISIS CON REFLECTION ===")
+
+        val claseAnalizada = tipoPizza::class
+        val esPromocionable = claseAnalizada.hasAnnotation<main.kotlin.cl.duoc.pizzeria.model.Promocionable>()
+        println("¿El producto ${tipoPizza.nombrePizza} califica para promoción?: $esPromocionable")
+
+        println("Propiedades de la clase Pizza detectadas en ejecución:")
+        for (propiedad in claseAnalizada.memberProperties) {
+            println("- ${propiedad.name}")
+        }
 
     } else {
         println("\n==================================")
