@@ -45,4 +45,18 @@ class Pedido(
     operator fun component1(): Cliente = this.cliente
     operator fun component2(): Pizza = this.tipoPizza
     operator fun component3(): Double = this.calcularTotal()
+
+    // Sobrecarga del operador '+' para combinar pedidos
+    operator fun plus(otroPedido: Pedido): Pedido {
+        // Sumamos las cantidades de pizzas
+        val cantidadCombinada = this.cantidadPizzas + otroPedido.cantidadPizzas
+
+        // Regresa un nuevo objeto Pedido que contiene ambos pedidos
+        return Pedido(
+            idPedido = "${this.idPedido}-${otroPedido.idPedido}", // Fusionamos los IDs (Solo para testing, el ID aun es estatico).
+            cliente = this.cliente,
+            tipoPizza = this.tipoPizza,
+            cantidadPizzas = cantidadCombinada
+        )
+    }
 }

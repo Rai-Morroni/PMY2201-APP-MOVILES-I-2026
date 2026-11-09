@@ -1,7 +1,6 @@
 package main.kotlin.cl.duoc.pizzeria
 
 import main.kotlin.cl.duoc.pizzeria.model.Cliente
-import main.kotlin.cl.duoc.pizzeria.model.EstadoPedido
 import main.kotlin.cl.duoc.pizzeria.model.Pedido
 import main.kotlin.cl.duoc.pizzeria.model.Pizza
 import main.kotlin.cl.duoc.pizzeria.model.Repartidor
@@ -180,6 +179,7 @@ fun main() {
         // Desestructuración de Cliente
         val (nombreDesestructurado, telefonoDesestructurado, emailDesestructurado) = clienteActual
 
+        println("\n=== DEMOSTRACIÓN SIMULADA DE DESESTRUCTURACIÓN ===")
         println("\n=== DATOS DESESTRUCTURADOS DEL CLIENTE ===")
         println("Nombre: $nombreDesestructurado | Teléfono: $telefonoDesestructurado | Email: $emailDesestructurado")
 
@@ -226,6 +226,22 @@ fun main() {
         println("Estado Pedido: ${pedidoActual.estado}")
         println("Repartidor: ${repartidorAsignado.nombre} está ${repartidorAsignado.disponibilidad}")
         println("==================================")
+
+        // ===== DEMOSTRACIÓN DE SOBRECARGA =====
+        println("\n=== DEMOSTRACIÓN SIMULADA DE SOBRECARGA Y METAPROGRAMACIÓN ===")
+
+        // 1. Sobrecarga del operador '+': Combinación de pedidos
+        val pedidoExtra = Pedido("2002", clienteActual, tipoPizza, 1) // Simulación: Cliente pide 1 pizza extra
+        val pedidoFusionado = pedidoActual + pedidoExtra
+
+        println("Pedidos combinados (ID original + ID extra): ${pedidoFusionado.idPedido}")
+        println("Nueva cantidad total de pizzas: ${pedidoFusionado.cantidadPizzas}")
+        println("Nuevo Total a Pagar: $${pedidoFusionado.calcularTotal()}")
+
+        // 2. Sobrecarga del operador '==': Igualdad de objetos
+        val pizzaComparacion = Pizza(tipoPizza.nombrePizza, tipoPizza.precioUnitario, tipoPizza.recetaPizza)
+        println("¿El producto original y el de comparación son lógicamente iguales?: ${tipoPizza == pizzaComparacion}")
+
     } else {
         println("\n==================================")
         println("Stock insuficiente de ingredientes para la Pizza de ${tipoPizza.nombrePizza}")

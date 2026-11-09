@@ -2,7 +2,7 @@ package main.kotlin.cl.duoc.pizzeria.model
 
 // Con @Promocionable se indica que cualquier objeto nacido de la clase Pizza podria ser parte de una promoción
 @Promocionable
-class Pizza(
+data class Pizza(
     val nombrePizza: String,                // “Pepperoni” o “Cuatro Quesos”
     val precioUnitario: Int,                // Precio de cada pizza
     val recetaPizza: Map<String, Int>,       // Map<String, Int> como receta de ingredientes
