@@ -39,4 +39,10 @@ class Pedido(
         // Regla negocio: Redondear cifra hacia arriba (CLP)
         return ceil(totalConIva)
     }
+
+    // Funciones manuales de desestructuración
+    // Al desestructurar Pedido, el orden de los elementos será el siguiente: Cliente, Pizza y calcularTotal.
+    operator fun component1(): Cliente = this.cliente
+    operator fun component2(): Pizza = this.tipoPizza
+    operator fun component3(): Double = this.calcularTotal()
 }

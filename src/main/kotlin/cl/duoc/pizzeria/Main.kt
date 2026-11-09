@@ -88,7 +88,7 @@ fun main() {
     val patronRut = Regex("^[0-9]{7,8}-[0-9Kk]$")
 
     do {
-        print("Ingrese RUT del Cliente (sin puntos ni guión y CON dígito verificador): ")
+        print("Ingrese RUT del Cliente (SIN puntos, CON guión y CON dígito verificador): ")
         // Trim elimina espacios en blanco al inicio o final de la entrada
         val entradaRut = readln().trim()
 
@@ -177,6 +177,12 @@ fun main() {
 
         val clienteActual = Cliente(nombre = nombre, telefono = telefono, email = email, rut = rutCompleto, direccion = direccion)
 
+        // Desestructuración de Cliente
+        val (nombreDesestructurado, telefonoDesestructurado, emailDesestructurado) = clienteActual
+
+        println("\n=== DATOS DESESTRUCTURADOS DEL CLIENTE ===")
+        println("Nombre: $nombreDesestructurado | Teléfono: $telefonoDesestructurado | Email: $emailDesestructurado")
+
         // Declaramos la lista de empleados disponibles
         val listaRepartidores = listOf(
             Repartidor("Juan", "987654321", "juan@mail.com", "11.111.111-1", "No disponible", 10.5),
@@ -193,16 +199,22 @@ fun main() {
         // Agrega el pedidoActual a la Lista de historial de pedidos.
         historialPedidos.add(pedidoActual)
 
+        // Desestructuración de Pedido
+        val (clientePedido, productoPedido, totalPedido) = pedidoActual
+
+        println("\n=== DATOS DESESTRUCTURADOS DEL PEDIDO ===")
+        println("Cliente: ${clientePedido.nombre} | Producto: ${productoPedido.nombrePizza} | Total Calculado: $$totalPedido")
+
         // 4. Resumen del Pedido
         println("\n==================================")
         println("      RESUMEN DEL PEDIDO          ")
         println("==================================")
         println("ID Pedido: ${pedidoActual.idPedido}")
-        println("Cliente: ${clienteActual.nombre}")
+        println("Cliente: ${nombreDesestructurado}")
         println("RUT: ${clienteActual.rut}")
-        println("Email: ${clienteActual.email}")
+        println("Email: ${emailDesestructurado}")
         println("Dirección: ${clienteActual.direccion}")
-        println("Teléfono: ${clienteActual.telefono}")
+        println("Teléfono: ${telefonoDesestructurado}")
         println( notas?.let { "Notas: $it" } ?: "Sin notas" )
         println("----------------------------------")
         println("Tipo Pizza: ${tipoPizza.nombrePizza}")
@@ -210,7 +222,7 @@ fun main() {
         println("Cantidad: ${cantidadPizzasIngresada}")
         println("SubTotal: $${(cantidadPizzasIngresada * tipoPizza.precioUnitario)}")
         if (cantidadPizzasIngresada > 3) println("Descuento: 10% Aplicado")
-        println("Total a Pagar + IVA: $${pedidoActual.calcularTotal()}")
+        println("Total a Pagar + IVA: $$totalPedido")
         println("Estado Pedido: ${pedidoActual.estado}")
         println("Repartidor: ${repartidorAsignado.nombre} está ${repartidorAsignado.disponibilidad}")
         println("==================================")
